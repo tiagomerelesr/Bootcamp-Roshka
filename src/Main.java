@@ -32,10 +32,13 @@ public class Main {
             int toros = 0, vacas = 0;
 
             for (int i = 0; i < 4; i++) {
-                if (secreto.charAt(i) == intento.charAt(i)) toros++;
-                else if (secreto.contains("" + intento.charAt(i))) vacas++;
-            }
+                if (secreto.charAt(i) == intento.charAt(i)) {
+                    toros++;
+                } else if (secreto.contains("" + intento.charAt(i))) {
+                    vacas++;
+                }
 
+                }
             System.out.println(vacas + " vacas, " + toros + " toros");
 
             if (toros == 4) {
@@ -43,7 +46,6 @@ public class Main {
                 break;
             }
         }
-        sc.close();
+       sc.close();
     }
-
 }
