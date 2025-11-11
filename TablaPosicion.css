@@ -1,0 +1,212 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #000000;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+}
+
+h1 {
+  color: #333;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  flex: 1;                     /* Ocupa el espacio del medio */
+}
+
+.Logodivision {
+  width: 300px;                
+  height: auto;
+}
+
+.LogoApf {
+  width: 80px;
+  height: auto;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.tabla-posiciones {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabla-posiciones thead {
+    background: #173ce0;
+    color: white;
+}
+
+.tabla-posiciones thead th {
+    padding: 15px 10px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.tabla-posiciones thead th:first-child {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.tabla-posiciones tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.tabla-posiciones tbody tr:last-child {
+    border-bottom: none;
+}
+
+.tabla-posiciones tbody td {
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.equipo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left !important;
+    padding-left: 20px !important;
+}
+
+.numero {
+    font-weight: bold;
+    color: #764ba2;
+    font-size: 1.1rem;
+    min-width: 25px;
+}
+
+.logo {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: #f8f9fa;
+    padding: 3px;
+}
+
+.nombre {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+.puntos {
+    font-weight: bold;
+    color: #0a0c1300;
+    font-size: 1.1rem;
+}
+
+/* Últimos resultados */
+.ultimos {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.resultado {
+    width: 24px;
+    height: 24px;
+    border-radius: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: white;
+}
+
+.victoria {
+    background: #02680a;
+}
+
+.empate {
+    background: #969797;
+}
+
+.derrota {
+    background: #eb3349;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .tabla-posiciones {
+        font-size: 0.85rem;
+    }
+
+    .logo {
+        width: 25px;
+        height: 25px;
+    }
+
+    .nombre {
+        font-size: 0.9rem;
+    }
+
+    .equipo {
+        gap: 8px;
+    }
+
+    .resultado {
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
+    }
+
+
+}
+
+@media (max-width: 480px) {
+    .tabla-posiciones thead th,
+    .tabla-posiciones tbody td {
+        padding: 10px 5px;
+        font-size: 0.75rem;
+    }
+
+    .equipo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .ultimos {
+        flex-wrap: wrap;
+    }
+}
