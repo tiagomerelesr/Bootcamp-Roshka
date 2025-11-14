@@ -23,8 +23,8 @@ public class SecurityConfig {
                         .requestMatchers("/usuarios/*/asignar-stock/*").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .httpBasic(httpBasic -> {}) // nuevo formato
-                .formLogin(form -> form.disable()); // desactiva login web
+                .httpBasic(httpBasic -> {}) 
+                .formLogin(form -> form.disable()); 
 
         return http.build();
     }
