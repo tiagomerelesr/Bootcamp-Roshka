@@ -37,7 +37,7 @@ public class Stock {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-    // AGREGA ESTOS MÉTODOS
+
     public Usuario getUsuario() {
         return usuario;
     }
