@@ -5,7 +5,6 @@ public class Poker {
     public static void main(String[] args) {
         Random random = new Random();
 
-        // Generar dos manos
         Carta[] mano1 = generarMano(random);
         Carta[] mano2 = generarMano(random);
 
@@ -15,9 +14,8 @@ public class Poker {
         System.out.println("\nMano 2:");
         imprimirMano(mano2);
 
-        // Evaluar ambas manos
-        int puntaje1 = evaluarMano(mano1);
-        int puntaje2 = evaluarMano(mano2);
+        static int evaluarMano(mano1);
+        int puntaje2 = evaluarManano(mano2);
 
         System.out.println("\nJugada Mano 1 = " + nombreJugada(puntaje1));
         System.out.println("Jugada Mano 2 = " + nombreJugada(puntaje2));
@@ -31,28 +29,25 @@ public class Poker {
         }
     }
 
-    // Generar mano aleatoria
     static Carta[] generarMano(Random random) {
         Carta[] mano = new Carta[5];
         char[] palos = {'S', 'C', 'H', 'D'};
 
         for (int i = 0; i < 5; i++) {
-            int valor = random.nextInt(13) + 2; // 2–14
+            int valor = random.nextInt(13) + 2;
             char palo = palos[random.nextInt(4)];
             mano[i] = new Carta(valor, palo);
         }
         return mano;
     }
 
-    // Imprimir mano
     static void imprimirMano(Carta[] mano) {
         for (Carta carta : mano) {
             System.out.println(carta);
         }
     }
 
-    // Evaluar la mano
-    static int evaluarMano(Carta[] mano) {
+    static int evaluarManano(Carta[] mano) {
 
         boolean color = true;
         char paloBase = mano[0].palos;
@@ -116,3 +111,4 @@ public class Poker {
         };
     }
 }
+
