@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "bundler",
+    "strict": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./distJS",
+    "skipLibCheck": true
+  },
+  "include": ["*.ts"],
+  "exclude": ["distJS", "*.js", "node_modules"]
+}
