@@ -1,62 +1,52 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getToken, removeToken } from "../utils/auth";
+import { getUsuario, getRol } from "../utils/auth";
 
-export default function Home() {
-  const navigate = useNavigate();
-
-  // Proteger ruta (si no hay token → redirigir al login)
-  useEffect(() => {
-    const token = getToken();
-    if (!token) navigate("/login");
-  }, []);
-
-  // Logout correcto
-  const handleLogout = () => {
-    removeToken();
-    navigate("/login");
-  };
+export default function AdminPanel() {
+  const usuario = getUsuario();
+  const rol = getRol();
 
   return (
     <div className="min-h-screen bg-gray-100">
-
-      {/* NAVBAR */}
-      <nav className="bg-white shadow px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <h1 className="text-2xl font-bold text-blue-600">
-          Inicio
+      <header className="bg-white shadow px-6 py-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-purple-600">
+          Panel de Administración
         </h1>
-
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition shadow-sm"
-        >
-          Cerrar sesión
-        </button>
-      </nav>
-
-      {/* CONTENIDO */}
-      <div className="p-10">
-        <h2 className="text-3xl font-semibold mb-8">Menú Inicial</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer">
-            <h3 className="text-xl font-semibold mb-2">Usuarios</h3>
-            <p className="text-gray-600">Administrar usuarios del sistema.</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer">
-            <h3 className="text-xl font-semibold mb-2">Operaciones</h3>
-            <p className="text-gray-600">Ver tareas asignadas.</p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer">
-            <h3 className="text-xl font-semibold mb-2">Mi Perfil</h3>
-            <p className="text-gray-600">Ver y actualizar tu información personal.</p>
-          </div>
-
+        <div className="text-sm text-gray-600">
+          {usuario && (
+            <>
+              <span className="font-semibold">{usuario}</span> · Rol: {rol}
+            </>
+          )}
         </div>
-      </div>
+      </header>
+
+      <main className="p-8 space-y-6">
+        <p className="text-gray-700">
+          Aquí después conectamos el CRUD de usuarios y devices.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="font-semibold mb-2">Usuarios</h2>
+            <p className="text-sm text-gray-500">
+              Listar, crear, editar y eliminar usuarios.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="font-semibold mb-2">Dispositivos</h2>
+            <p className="text-sm text-gray-500">
+              Ver historial de dispositivos que iniciaron sesión.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="font-semibold mb-2">Reportes</h2>
+            <p className="text-sm text-gray-500">
+              (Idea futura) métricas de accesos y seguridad.
+            </p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

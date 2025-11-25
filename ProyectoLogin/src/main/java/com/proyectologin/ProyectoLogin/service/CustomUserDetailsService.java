@@ -13,15 +13,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsuarioRepository repo;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
 
-        Usuario user = repo.findByEmail(email)
+        Usuario user = repo.findByUsuario(usuario)
                 .orElseThrow(() -> new UsernameNotFoundException("No existe el usuario"));
 
         return User.builder()
-                .username(user.getEmail())
+                .username(user.getUsuario())   //
                 .password(user.getPassword())
-                .roles(user.getRol())  // ADMIN / USER
+                .roles(user.getRol())          // ADMIN / USER
                 .build();
     }
 }

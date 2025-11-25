@@ -1,40 +1,49 @@
 package com.proyectologin.ProyectoLogin.security;
 
-
 import com.proyectologin.ProyectoLogin.model.Usuario;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 
-//Clase encargada de crear y valida tokens
 @Service
 public class JwtService {
 
-        //Clave secreta interna
-        private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final long EXPIRATION_MS = 1000 * 60 * 60 * 4; // 4 horas
 
-        //Genera un token
-        public String generateToken(Usuario user){
-            return Jwts.builder()
-                    .setSubject(user.getEmail())           // usuario
-                    .claim("rol", user.getRol())           // rol
-                    .setIssuedAt(new Date())               // fecha de creación
-                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // válido por 24h
-                    .signWith(key)
-                    .compact();
-        }
+    public String generateToken(Usuario user) {
+        return Jwts.builder()
+                .setSubject(user.getUsuario())
+                .claim("rol", user.getRol())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .signWith(key)
+                .compact();
+    }
 
-    //Extrae el email desde un token JWT
-    public String getEmailFromToken(String token){
+    public String extractUsername(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String username = extractUsername(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        Date expiration = extractAllClaims(token).getExpiration();
+        return expiration.before(new Date());
+    }
+
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
     }
 }

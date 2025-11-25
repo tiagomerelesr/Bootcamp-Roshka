@@ -1,23 +1,46 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
-import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+import UserPanel from "./pages/UserPanel";
+import UserDevices from "./pages/UserDevices";
+
+import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        {/* LOGIN */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+
         <Route path="/login" element={<Login />} />
 
-        {/* HOME PROTEGIDA */}
+        {/* USER */}
         <Route
-          path="/home"
+          path="/user"
           element={
-            <ProtectedRoute>
-              <Home />
+            <ProtectedRoute requiredRole="USER">
+              <UserPanel />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/user/devices"
+          element={
+            <ProtectedRoute requiredRole="USER">
+              <UserDevices />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <AdminPanel />
             </ProtectedRoute>
           }
         />
