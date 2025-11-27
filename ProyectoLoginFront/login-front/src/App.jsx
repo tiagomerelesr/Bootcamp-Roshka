@@ -1,53 +1,57 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
 
+// Login
+import Login from "./pages/Login";
+
+// Layouts
+import AdminLayout from "./layouts/AdminLayout";
+import UserLayout from "./layouts/UserLayout";
+
+// Admin pages
+import AdminPanel from "./pages/AdminPanel";
+import AdminDevices from "./pages/AdminDevices";
+import AdminEquipos from "./pages/AdminEquipos";
+import AdminUsuarios from "./pages/AdminUsuarios";   
+
+// User pages
 import UserPanel from "./pages/UserPanel";
 import UserDevices from "./pages/UserDevices";
+import UserPerfil from "./pages/UserPerfil";        
 
-import AdminPanel from "./pages/AdminPanel";
+// Seguridad
+import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
 
-        <Route path="/" element={<Navigate to="/login" />} />
-
+        {/* ---------------- LOGIN ---------------- */}
         <Route path="/login" element={<Login />} />
 
-        {/* USER */}
-        <Route
-          path="/user"
-          element={
-            <ProtectedRoute requiredRole="USER">
-              <UserPanel />
-            </ProtectedRoute>
-          }
-        />
+        {/* ---------------- ADMIN ROUTES ---------------- */}
+        <Route element={<ProtectedRoute role="ADMIN" />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminPanel />} />
+            <Route path="devices" element={<AdminDevices />} />
+            <Route path="equipos" element={<AdminEquipos />} />
+            <Route path="usuarios" element={<AdminUsuarios />} />  {/* AGREGADO */}
+          </Route>
+        </Route>
 
-        <Route
-          path="/user/devices"
-          element={
-            <ProtectedRoute requiredRole="USER">
-              <UserDevices />
-            </ProtectedRoute>
-          }
-        />
+        {/* ---------------- USER ROUTES ---------------- */}
+        <Route element={<ProtectedRoute role="USER" />}>
+          <Route path="/user" element={<UserLayout />}>
+            <Route index element={<UserPanel />} />
+            <Route path="devices" element={<UserDevices />} />
+            <Route path="perfil" element={<UserPerfil />} /> {/*  AGREGADO */}
+          </Route>
+        </Route>
 
-        {/* ADMIN */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute requiredRole="ADMIN">
-              <AdminPanel />
-            </ProtectedRoute>
-          }
-        />
+        {/* DEFAULT */}
+        <Route path="*" element={<Navigate to="/login" />} />
 
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default App;

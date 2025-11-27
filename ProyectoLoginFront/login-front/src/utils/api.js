@@ -1,37 +1,38 @@
 const API_URL = "http://localhost:8080";
 
 export async function apiFetch(endpoint, options = {}) {
-  console.log("➡️ Llamando a:", API_URL + endpoint); // DEBUG
 
-  try {
-    let headers = {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    };
+  let headers = {
+    "Content-Type": "application/json",
+    "User-Agent": navigator.userAgent,
+    ...(options.headers || {}),
+  };
 
-    // NO agregar token en endpoints públicos
-    const isPublicEndpoint =
-      endpoint.startsWith("/api/auth/login") ||
-      endpoint.startsWith("/api/auth/register") ||
-      endpoint.startsWith("/api/auth/refresh");
+  const isPublicEndpoint =
+    endpoint.startsWith("/api/auth/login");
 
-    if (!isPublicEndpoint) {
-      const token = sessionStorage.getItem("token");
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
+  if (!isPublicEndpoint) {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
     }
-
-    const response = await fetch(API_URL + endpoint, {
-      ...options,
-      headers,
-    });
-
-    console.log("⬅ Respuesta recibida:", response); 
-
-    return response;
-  } catch (error) {
-    console.error("ERROR en apiFetch:", error);
-    throw error;
   }
+
+  const response = await fetch(API_URL + endpoint, {
+    ...options,
+    headers,
+  });
+
+  // NO HACEMOS LOGOUT AUTOMÁTICO
+  if (response.status === 401) {
+    console.warn("401 – Token ausente o inválido PERO no hacemos logout");
+    return response;
+  }
+
+  if (response.status === 403) {
+    console.warn("403 – Rol sin permisos PERO no hacemos logout");
+    return response;
+  }
+
+  return response;
 }

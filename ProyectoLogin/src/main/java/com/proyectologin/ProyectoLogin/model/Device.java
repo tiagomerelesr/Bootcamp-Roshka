@@ -8,18 +8,20 @@ import java.time.LocalDateTime;
 @Data
 public class Device {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        private String browser;
-        private String os;
-        private String deviceType;
-        private String ipAddress;
-        private LocalDateTime lastLogin;
+    private String browser;
+    private String os;
+    private String deviceType;
+    private String ipAddress;
+    private LocalDateTime lastLogin;
 
-        @ManyToOne
-        @JoinColumn(name = "user_id")
-        private Usuario user;
+    private boolean active = true;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Usuario user;
 }
 

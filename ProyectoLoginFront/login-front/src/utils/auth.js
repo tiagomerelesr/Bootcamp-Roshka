@@ -1,43 +1,37 @@
+// =========================
+// AUTH — GESTIÓN DE LOGIN
+// =========================
 
-// auth.js
-
+// Guarda el token
 export function saveToken(token) {
   sessionStorage.setItem("token", token);
 }
 
+// Obtiene token
 export function getToken() {
   return sessionStorage.getItem("token");
 }
 
-export function removeToken() {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("rol");
-  sessionStorage.removeItem("usuario");
+// Guarda datos del usuario
+export function saveUserInfo({ rol, usuario, id }) {
+  sessionStorage.setItem("rol", rol);
+  sessionStorage.setItem("usuario", usuario);
+  sessionStorage.setItem("userId", id);
 }
 
-export function saveUserInfo({ rol, usuario }) {
-  if (rol) sessionStorage.setItem("rol", rol);
-  if (usuario) sessionStorage.setItem("usuario", usuario);
-}
-
-export function getRol() {
-  return sessionStorage.getItem("rol");
-}
-
-export function getUsuario() {
-  return sessionStorage.getItem("usuario");
-}
-
-export function clearAuth() {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("rol");
-  sessionStorage.removeItem("usuario");
-}
-
+// RETORNA UN SOLO OBJETO CON TODA LA INFO
 export function getUserInfo() {
   return {
     rol: sessionStorage.getItem("rol"),
     usuario: sessionStorage.getItem("usuario"),
+    id: sessionStorage.getItem("userId"),
   };
 }
 
+// Limpia todo
+export function clearAuth() {
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("rol");
+  sessionStorage.removeItem("usuario");
+  sessionStorage.removeItem("userId");
+}

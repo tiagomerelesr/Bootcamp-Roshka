@@ -4,7 +4,6 @@ import com.proyectologin.ProyectoLogin.dto.LoginRequest;
 import com.proyectologin.ProyectoLogin.dto.LoginResponse;
 import com.proyectologin.ProyectoLogin.model.Device;
 import com.proyectologin.ProyectoLogin.model.Usuario;
-import com.proyectologin.ProyectoLogin.repository.DeviceRepository;
 import com.proyectologin.ProyectoLogin.repository.UsuarioRepository;
 import com.proyectologin.ProyectoLogin.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +18,13 @@ import java.time.LocalDateTime;
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
-    private final DeviceRepository deviceRepository;
+    private final DeviceService deviceService;
     private final JwtService jwtService;
     private final BCryptPasswordEncoder encoder;
 
     public LoginResponse login(LoginRequest request, HttpServletRequest servletRequest) {
 
+        // acá validamos el usuario
         Usuario user = usuarioRepository.findByUsuario(request.getUsuario())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -32,28 +32,36 @@ public class AuthService {
             throw new RuntimeException("Credenciales incorrectas");
         }
 
+        // generamos el token
         String token = jwtService.generateToken(user);
 
-        // Guardar info del dispositivo
-        String userAgent = servletRequest.getHeader("User-Agent");
+        // detectamos los datos del dispositivo
+        String ua = servletRequest.getHeader("User-Agent");
 
-        Device device = new Device();
-        device.setBrowser(getBrowser(userAgent));
-        device.setOs(getOs(userAgent));
-        device.setDeviceType(getDeviceType(userAgent));
-        device.setIpAddress(servletRequest.getRemoteAddr());
-        device.setLastLogin(LocalDateTime.now());
-        device.setUser(user);
+        Device nuevo = new Device();
+        nuevo.setBrowser(getBrowser(ua));
+        nuevo.setOs(getOs(ua));
+        nuevo.setDeviceType(getDeviceType(ua));
+        nuevo.setIpAddress(servletRequest.getRemoteAddr());
+        nuevo.setLastLogin(LocalDateTime.now());
 
-        deviceRepository.save(device);
+        nuevo.setUser(user);
+        nuevo.setActive(true);
 
+        // registrar/reactivar el dispositovo (activo/no activo)
+        deviceService.registrarOActualizar(nuevo, user);
+
+        // respuesta
         LoginResponse response = new LoginResponse();
-        response.setToken(token);
-        response.setRol(user.getRol());
         response.setUsuario(user.getUsuario());
+        response.setRol(user.getRol());
+        response.setToken(token);
+        response.setId(user.getId());
 
         return response;
     }
+
+    // helper
 
     private String getBrowser(String ua) {
         if (ua == null) return "UNKNOWN";
@@ -76,8 +84,10 @@ public class AuthService {
 
     private String getDeviceType(String ua) {
         if (ua == null) return "UNKNOWN";
-        if (ua.contains("Mobi") || ua.contains("Android") || ua.contains("iPhone")) return "Mobile";
-        if (ua.contains("iPad") || ua.contains("Tablet")) return "Tablet";
+        if (ua.contains("Mobi") || ua.contains("Android") || ua.contains("iPhone"))
+            return "Mobile";
+        if (ua.contains("iPad") || ua.contains("Tablet"))
+            return "Tablet";
         return "Desktop";
     }
 

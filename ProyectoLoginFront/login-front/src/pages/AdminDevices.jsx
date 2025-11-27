@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { apiFetch } from "../utils/api";
 import DeviceTable from "../components/DeviceTable";
@@ -12,19 +11,19 @@ export default function AdminDevices() {
     setDevices(data);
   };
 
-  useEffect(() => {
-    loadDevices();
-  }, []);
-
-  const handleDelete = async (id) => {
+  const deleteDevice = async (id) => {
     await apiFetch(`/api/device/${id}`, { method: "DELETE" });
     loadDevices();
   };
 
+  useEffect(() => {
+    loadDevices();
+  }, []);
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Todos los dispositivos</h1>
-      <DeviceTable devices={devices} onDelete={handleDelete} />
-    </div>
+    <>
+      <h1 className="text-3xl font-bold mb-6">Dispositivos conectados</h1>
+      <DeviceTable devices={devices} onDelete={deleteDevice} />
+    </>
   );
 }

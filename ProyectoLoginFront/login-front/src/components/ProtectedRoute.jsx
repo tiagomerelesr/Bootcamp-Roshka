@@ -1,20 +1,23 @@
-import { Navigate } from "react-router-dom";
-import { getToken, getRol } from "../utils/auth";
+import { Navigate, Outlet } from "react-router-dom";
+import { getUserInfo, getToken } from "../utils/auth";
 
-export default function ProtectedRoute({ children, requiredRole }) {
+export default function ProtectedRoute({ role }) {
 
   const token = getToken();
-  const rol = getRol(); // “ADMIN” o “USER”
+  const user = getUserInfo();
 
-  // Si no tiene token → login
-  if (!token) {
+  // Si NO hay token → login
+  if (!token) return <Navigate to="/login" replace />;
+
+  // Si el usuario aún no está cargado → NO redirigir todavía
+  if (!user || !user.rol) {
+    return <div className="text-center p-4">Cargando...</div>;
+  }
+
+  // Si el rol no coincide → login
+  if (role && user.rol !== role) {
     return <Navigate to="/login" replace />;
   }
 
-  // Si se exige un rol y NO coincide → redirigir a SU dashboard, no al /home
-  if (requiredRole && rol !== requiredRole) {
-    return <Navigate to={`/${rol.toLowerCase()}`} replace />;
-  }
-
-  return children;
+  return <Outlet />;
 }
